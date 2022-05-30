@@ -1,0 +1,31 @@
+{
+  "nom": "ISMO Tetouan",
+  "Adresse": "Martil",
+  "specialite": "Informatique",
+  "filieres": [
+    {
+      "code": "TDI",
+      "description": "Techniques de developpement informatique",
+      "niveau": "TS",
+      "nbModule": 26
+    },
+    {
+      "code": "TRI",
+      "description": "Techniques des reseaux informatique",
+      "niveau": "TS",
+      "nbModule": 24
+    },
+    {
+      "code": "INFO",
+      "description": "INFORGRAPHIE",
+      "niveau": "TS",
+      "nbModule": 26
+    },
+    {
+      "code": "BCMOS",
+      "description": "BUREAUTIQUE",
+      "niveau": "Qualif",
+      "nbModule": 8
+    }
+  ]
+}
