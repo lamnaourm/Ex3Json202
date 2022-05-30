@@ -1,11 +1,11 @@
 package com.example.ex3json202;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,27 +30,22 @@ public class MainActivity extends AppCompatActivity {
         t3 = findViewById(R.id.specialite);
         lst = findViewById(R.id.lst);
 
-        try {
-            JSONObject obj = new JSONObject(loadJsonFromRaw(R.raw.etablissement));
+        Etablissement ee = getEtablissementFromJSON();
 
-            t1.setText("Nom Etablissement : " + obj.getString("nom"));
-            t2.setText("Adresse : " + obj.getString("Adresse"));
-            t3.setText("Specialite  : "  + obj.getString("specialite"));
-            JSONArray arr = obj.getJSONArray("filieres");
-            ArrayList<String> fils = new ArrayList<>();
-            for(int i=0;i<arr.length();i++){
-                JSONObject o = arr.getJSONObject(i);
-                fils.add(o.getString("description") + " - " + o.getInt("nbModule") );
-            }
-
-            ArrayAdapter ad = new ArrayAdapter(this, android.R.layout.simple_list_item_1,fils);
-            lst.setAdapter(ad);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        t1.setText("Nom Etablissement : " + ee.getNom());
+        t2.setText("Adresse : " + ee.getAdresse());
+        t3.setText("Specialite  : " + ee.getSpecialite());
+        ArrayList<String> fils = new ArrayList<>();
+        for (int i = 0; i < ee.getFilieres().size(); i++) {
+            fils.add(ee.getFilieres().get(i).getDescription() + " - " + ee.getFilieres().get(i).getNbModule());
         }
+
+        ArrayAdapter ad = new ArrayAdapter(this, android.R.layout.simple_list_item_1, fils);
+        lst.setAdapter(ad);
+
     }
 
-    public String loadJsonFromRaw(int resId){
+    public String loadJsonFromRaw(int resId) {
         try {
             InputStream in = getResources().openRawResource(resId);
             byte[] data = new byte[in.available()];
@@ -60,5 +55,32 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public Etablissement getEtablissementFromJSON() {
+        Etablissement e = new Etablissement();
+        try {
+            JSONObject obj = new JSONObject(loadJsonFromRaw(R.raw.etablissement));
+
+            e.setNom(obj.getString("nom"));
+            e.setAdresse(obj.getString("Adresse"));
+            e.setSpecialite(obj.getString("specialite"));
+            JSONArray arr = obj.getJSONArray("filieres");
+            for (int i = 0; i < arr.length(); i++) {
+                Filiere f = new Filiere();
+                JSONObject o = arr.getJSONObject(i);
+
+                f.setCode(o.getString("code"));
+                f.setDescription(o.getString("description"));
+                f.setNiveau(o.getString("niveau"));
+                f.setNbModule(o.getInt("nbModule"));
+
+                e.getFilieres().add(f);
+            }
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        }
+
+        return e;
     }
 }
