@@ -19,11 +19,14 @@ public class MainActivity extends AppCompatActivity {
 
     TextView t1, t2, t3;
     ListView lst;
+    MyDBFiliere db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        db = new MyDBFiliere(this);
 
         t1 = findViewById(R.id.nom);
         t2 = findViewById(R.id.adr);
@@ -40,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
             fils.add(ee.getFilieres().get(i).getDescription() + " - " + ee.getFilieres().get(i).getNbModule());
         }
 
+        for(Filiere ff : ee.getFilieres())
+            MyDBFiliere.insert_filiere(db.getWritableDatabase(),ff);
+
         ArrayAdapter ad = new ArrayAdapter(this, android.R.layout.simple_list_item_1, fils);
         lst.setAdapter(ad);
-
     }
 
     public String loadJsonFromRaw(int resId) {
